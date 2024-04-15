@@ -1,0 +1,808 @@
+mysql> use cdac;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_cdac |
++----------------+
+| account        |
+| cardinfo       |
+| cardtype       |
+| customer       |
+| dept           |
+| dept1          |
+| emp            |
+| emp1           |
+| locale         |
+| student        |
++----------------+
+10 rows in set (0.03 sec)
+
+mysql> select * from emp1;
++-------+-------+------+----------+--------+------+
+| empno | ename | pan  | sal      | deptno | city |
++-------+-------+------+----------+--------+------+
+|     1 | ABC   | P001 | 20000.00 |     20 | mum  |
+|     2 | DEF   | P002 | 30000.00 |     10 | mum  |
+|     3 | XYZ   | P003 | 25000.00 |     30 | pune |
++-------+-------+------+----------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> add comm numeric(10,2);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from emp1;
++-------+-------+------+----------+--------+------+------+
+| empno | ename | pan  | sal      | deptno | city | comm |
++-------+-------+------+----------+--------+------+------+
+|     1 | ABC   | P001 | 20000.00 |     20 | mum  | NULL |
+|     2 | DEF   | P002 | 30000.00 |     10 | mum  | NULL |
+|     3 | XYZ   | P003 | 25000.00 |     30 | pune | NULL |
++-------+-------+------+----------+--------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> drop comm;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(20)   | NO   |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> modify ename(40);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(40)' at line 2
+mysql> alter table emp1
+    -> modify ename varchar(40);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> desc student;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| rollno | int           | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(20)   | NO   |     | NULL    |                |
+| mobile | char(10)      | YES  | UNI | NULL    |                |
+| city   | varchar(20)   | YES  |     | NULL    |                |
+| score  | decimal(10,2) | YES  |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> drop primary key;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> alter table emp1
+    -> add primary key(pan);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> alter table emp1
+    -> add primary key(pan,empno);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> alter table emp1
+    -> drop primary key;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> desc table dept1;
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------+
+| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------+
+|  1 | SIMPLE      | dept1 | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    2 |   100.00 | NULL  |
++----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------+
+1 row in set, 1 warning (0.01 sec)
+
+mysql> desc dept1;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| deptno | decimal(2,0) | NO   | PRI | NULL    |       |
+| dname  | varchar(20)  | NO   |     | NULL    |       |
+| loc    | varchar(20)  | NO   |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> add primary key(deptno);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> alter table emp1
+    -> drop primary key;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> alter table dept1
+    -> drop primary key;
+ERROR 1553 (HY000): Cannot drop index 'PRIMARY': needed in a foreign key constraint
+mysql> alter table cardtype
+    -> drop primary key;
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> desc cardtype;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| card_id   | int         | NO   |     | NULL    |       |
+| card_type | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table cardtype
+    -> add primary key(card_id);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc cardtype;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| card_id   | int         | NO   | PRI | NULL    |       |
+| card_type | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table cardtype
+    -> drop primary key;
+Query OK, 3 rows affected (0.06 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> alter table cardtype
+    -> add primary key(card_id,card_type);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc cardtype;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| card_id   | int         | NO   | PRI | NULL    |       |
+| card_type | varchar(20) | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table cardtype
+    -> drop primary key;
+Query OK, 3 rows affected (0.06 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> desc cardtype;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| card_id   | int         | NO   |     | NULL    |       |
+| card_type | varchar(20) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> drop primary key, auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> alter table emp1
+    -> drop primary key(empno), auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(empno), auto_increment' at line 2
+mysql> alter table emp1
+    -> drop primary key auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto_increment' at line 2
+mysql> alter table emp1
+    -> drop primary key, auto_increment;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> alter table emp1
+    -> drop auto_increment, primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key' at line 2
+mysql> alter table emp1
+    -> drop auto_increment, 'primary key';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''primary key'' at line 2
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> change sal sal1 numeric(2)
+    -> ;
+ERROR 3959 (HY000): Check constraint 'emp1_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> alter table emp1
+    -> change sal sal1 numeric(10,3)
+    -> ;
+ERROR 3959 (HY000): Check constraint 'emp1_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> alter table emp1
+    -> change sal to sal1 numeric(10,3);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to sal1 numeric(10,3)' at line 2
+mysql> alter table emp1
+    -> change sal  sal1 numeric(10,3);
+ERROR 3959 (HY000): Check constraint 'emp1_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> alter table emp
+    -> change sal  sal1 numeric(10,3);
+Query OK, 14 rows affected (0.06 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> alter table emp
+    -> change sal1  sal numeric(10,3);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table emp1
+    -> rename to emp2;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc emp2;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table emp2
+    -> rename to emp1;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> 
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table emp1
+    -> add col comm numeric(10,2) after sal;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'comm numeric(10,2) after sal' at line 2
+mysql> alter table emp1
+    -> add comm numeric(10,2) after sal;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc emp1;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| empno  | int           | NO   | PRI | NULL    | auto_increment |
+| ename  | varchar(40)   | YES  |     | NULL    |                |
+| pan    | char(10)      | YES  | UNI | NULL    |                |
+| sal    | decimal(10,2) | YES  |     | NULL    |                |
+| comm   | decimal(10,2) | YES  |     | NULL    |                |
+| deptno | decimal(2,0)  | YES  | MUL | NULL    |                |
+| city   | varchar(20)   | YES  |     | pune    |                |
++--------+---------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+
+mysql> select lcase('VIJAY');
++----------------+
+| lcase('VIJAY') |
++----------------+
+| vijay          |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> select ucase('vijay');
++----------------+
+| ucase('vijay') |
++----------------+
+| VIJAY          |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> select ascii('vij');
++--------------+
+| ascii('vij') |
++--------------+
+|          118 |
++--------------+
+1 row in set (0.02 sec)
+
+mysql> 
+mysql> select length('vijay jagtap');
++------------------------+
+| length('vijay jagtap') |
++------------------------+
+|                     12 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select concat('vijay, ' jagtap');
+    '> ;
+    '> 
+    '> ^C
+mysql> select concat('vijay', ' jagtap');
++----------------------------+
+| concat('vijay', ' jagtap') |
++----------------------------+
+| vijay jagtap               |
++----------------------------+
+1 row in set (0.02 sec)
+
+mysql> select replace('vijay', 'i','ee');
++----------------------------+
+| replace('vijay', 'i','ee') |
++----------------------------+
+| veejay                     |
++----------------------------+
+1 row in set (0.02 sec)
+
+mysql> select rtrim('vijay     ') as rtrim);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> select rtrim('vijay     ') as rtrim;
++-------+
+| rtrim |
++-------+
+| vijay |
++-------+
+1 row in set (0.02 sec)
+
+mysql> select ltrim('    vijay     ') as ltrim;
++------------+
+| ltrim      |
++------------+
+| vijay      |
++------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select trim('    vijay     ') as trim;
++-------+
+| trim  |
++-------+
+| vijay |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select substr('vijay',1,4);
++---------------------+
+| substr('vijay',1,4) |
++---------------------+
+| vija                |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select instr('vijay','j');
++--------------------+
+| instr('vijay','j') |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select instr('vijay jagtap','j' 1,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,2)' at line 1
+mysql> 
+mysql> select instr('vijay jagtap','j', 1,2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap','j',2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> 
+mysql> select instr('vijay jagtap','j',2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap','j');
++---------------------------+
+| instr('vijay jagtap','j') |
++---------------------------+
+|                         3 |
++---------------------------+
+1 row in set (0.00 sec)
+
+mysql> select instr('vijay jagtap',1,2,'j');
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap',1,'j',2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap','j',1);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> 
+mysql> select ename, instr(ename,'a') as pos from emp;
++--------+------+
+| ename  | pos  |
++--------+------+
+| SMITH  |    0 |
+| ALLEN  |    1 |
+| WARD   |    2 |
+| JONES  |    0 |
+| MARTIN |    2 |
+| BLAKE  |    3 |
+| CLARK  |    3 |
+| SCOTT  |    0 |
+| KING   |    0 |
+| TURNER |    0 |
+| ADAMS  |    1 |
+| JAMES  |    2 |
+| FORD   |    0 |
+| MILLER |    0 |
++--------+------+
+14 rows in set (0.00 sec)
+
+mysql> 
+mysql> select lpad('vij',5);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'lpad'
+mysql> 
+mysql> select lpad('vij',5,'@');
++-------------------+
+| lpad('vij',5,'@') |
++-------------------+
+| @@vij             |
++-------------------+
+1 row in set (0.02 sec)
+
+mysql> 
+mysql> select instr('vijay jagtap','j',1,10);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap','j',1,2,3);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select rpad('vij',6,'@');
++-------------------+
+| rpad('vij',6,'@') |
++-------------------+
+| vij@@@            |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select instr('vijay jagtap','j',10,2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select instr('vijay jagtap','j',0,2);
+ERROR 1582 (42000): Incorrect parameter count in the call to native function 'instr'
+mysql> select sqrt(144);
++-----------+
+| sqrt(144) |
++-----------+
+|        12 |
++-----------+
+1 row in set (0.02 sec)
+
+mysql> 
+mysql> select abs(-144);
++-----------+
+| abs(-144) |
++-----------+
+|       144 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select ceiling(144.5465);
++-------------------+
+| ceiling(144.5465) |
++-------------------+
+|               145 |
++-------------------+
+1 row in set (0.02 sec)
+
+mysql> select floor(144.5465);
++-----------------+
+| floor(144.5465) |
++-----------------+
+|             144 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select round(144.545);
++----------------+
+| round(144.545) |
++----------------+
+|            145 |
++----------------+
+1 row in set (0.02 sec)
+
+mysql> select pow(2,5);
++----------+
+| pow(2,5) |
++----------+
+|       32 |
++----------+
+1 row in set (0.02 sec)
+
+mysql> 
+mysql> select sign(12);
++----------+
+| sign(12) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select sign(-12);
++-----------+
+| sign(-12) |
++-----------+
+|        -1 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select sign(0);
++---------+
+| sign(0) |
++---------+
+|       0 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select round(144.545,-1);
++-------------------+
+| round(144.545,-1) |
++-------------------+
+|               140 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select round(144.545,-2);
++-------------------+
+| round(144.545,-2) |
++-------------------+
+|               100 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select round(144.545,-3);
++-------------------+
+| round(144.545,-3) |
++-------------------+
+|                 0 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select round(144.545,1);
++------------------+
+| round(144.545,1) |
++------------------+
+|            144.5 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select round(144.545,0);
++------------------+
+| round(144.545,0) |
++------------------+
+|              145 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select ceiling(144);
++--------------+
+| ceiling(144) |
++--------------+
+|          144 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select floor(144);
++------------+
+| floor(144) |
++------------+
+|        144 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select greatest(14,5,8,5,5774);
++-------------------------+
+| greatest(14,5,8,5,5774) |
++-------------------------+
+|                    5774 |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> select LEAST(14,5,8,5,5774);
++----------------------+
+| LEAST(14,5,8,5,5774) |
++----------------------+
+|                    5 |
++----------------------+
+1 row in set (0.02 sec)
+
+mysql> 
+mysql> 
+mysql> select adddate('2021-1-1',50);
++------------------------+
+| adddate('2021-1-1',50) |
++------------------------+
+| 2021-02-20             |
++------------------------+
+1 row in set (0.02 sec)
+
+mysql> select adddate('2021-1-1',61);
++------------------------+
+| adddate('2021-1-1',61) |
++------------------------+
+| 2021-03-03             |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select adddate('2021-1-1',60);
++------------------------+
+| adddate('2021-1-1',60) |
++------------------------+
+| 2021-03-02             |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select adddate('2021-1-1',58);
++------------------------+
+| adddate('2021-1-1',58) |
++------------------------+
+| 2021-02-28             |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select addtime('2021-10-2 10:12:25, 05:25:50);
+    '> 
+    '> ^C
+mysql> select addtime('2021-10-2 10:12:25', '05:25:50');
++-------------------------------------------+
+| addtime('2021-10-2 10:12:25', '05:25:50') |
++-------------------------------------------+
+| 2021-10-02 15:38:15                       |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select addtime('2021-10-2 10:12:25', '05:25:35');
++-------------------------------------------+
+| addtime('2021-10-2 10:12:25', '05:25:35') |
++-------------------------------------------+
+| 2021-10-02 15:38:00                       |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select curdate();
++------------+
+| curdate()  |
++------------+
+| 2024-03-15 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select curtime();
++-----------+
+| curtime() |
++-----------+
+| 15:37:22  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select date('2003-12-31 01:02:15');
++-----------------------------+
+| date('2003-12-31 01:02:15') |
++-----------------------------+
+| 2003-12-31                  |
++-----------------------------+
+1 row in set (0.02 sec)
+
+mysql> select datediff('2024-5-5','2004-3-8');
++---------------------------------+
+| datediff('2024-5-5','2004-3-8') |
++---------------------------------+
+|                            7363 |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select datediff('2024-5-5','2004-3-8')/365;
++-------------------------------------+
+| datediff('2024-5-5','2004-3-8')/365 |
++-------------------------------------+
+|                             20.1726 |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select round(datediff('2024-5-5','2004-3-8')/365);
++--------------------------------------------+
+| round(datediff('2024-5-5','2004-3-8')/365) |
++--------------------------------------------+
+|                                         20 |
++--------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select ename, round(datediff(curdate(),hiredate)/365) as exp from emp;
++--------+------+
+| ename  | exp  |
++--------+------+
+| SMITH  |   12 |
+| ALLEN  |   12 |
+| WARD   |   11 |
+| JONES  |   11 |
+| MARTIN |   12 |
+| BLAKE  |   12 |
+| CLARK  |   12 |
+| SCOTT  |   12 |
+| KING   |   12 |
+| TURNER |   12 |
+| ADAMS  |   11 |
+| JAMES  |   12 |
+| FORD   |   12 |
+| MILLER |   12 |
++--------+------+
+14 rows in set (0.00 sec)
+
+mysql> select round(datediff('2024-5-5','2004-3-8')/30);
++-------------------------------------------+
+| round(datediff('2024-5-5','2004-3-8')/30) |
++-------------------------------------------+
+|                                       245 |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select round((datediff('2024-5-5','2004-3-8')/365) * 12);
++---------------------------------------------------+
+| round((datediff('2024-5-5','2004-3-8')/365) * 12) |
++---------------------------------------------------+
+|                                               242 |
++---------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> desc ('2024-02-21');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''2024-02-21')' at line 1
+mysql> 
+mysql> select desc ('2024-02-21');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc ('2024-02-21')' at line 1
+mysql> select cast('2024-10-22' as date);
++----------------------------+
+| cast('2024-10-22' as date) |
++----------------------------+
+| 2024-10-22                 |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select convert('2024-10-22', date);
++-----------------------------+
+| convert('2024-10-22', date) |
++-----------------------------+
+| 2024-10-22                  |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit

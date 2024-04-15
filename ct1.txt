@@ -1,0 +1,1373 @@
+mysql> create table Client_master
+    -> (client_no varchar(6) primary key,
+    -> Name varchar(20) not null,
+    -> address1 varchar(30),
+    -> address2 varchar(30),
+    -> city varchar(15),
+    -> state varchar(15),
+    -> pincode numeric(6),
+    -> bal_due numeric(10,2));
+ERROR 1046 (3D000): No database selected
+mysql> use cdac;
+Database changed
+mysql> create table Client_master
+    -> (client_no varchar(6) primary key,
+    -> Name varchar(20) not null,
+    -> address1 varchar(30),
+    -> address2 varchar(30),
+    -> city varchar(15),
+    -> state varchar(15),
+    -> pincode numeric(6),
+    -> bal_due numeric(10,2));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc Client_master;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| client_no | varchar(6)    | NO   | PRI | NULL    |       |
+| Name      | varchar(20)   | NO   |     | NULL    |       |
+| address1  | varchar(30)   | YES  |     | NULL    |       |
+| address2  | varchar(30)   | YES  |     | NULL    |       |
+| city      | varchar(15)   | YES  |     | NULL    |       |
+| state     | varchar(15)   | YES  |     | NULL    |       |
+| pincode   | decimal(6,0)  | YES  |     | NULL    |       |
+| bal_due   | decimal(10,2) | YES  |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> create table product_master
+    -> (product_no varchar(6) primary key,
+    -> description varchar(50) not null,
+    -> profit_percent numeric(3,2) not null,
+    -> unit_measure varchar(10) not null,
+    -> qty_on_hand numeric(7) not null,
+    -> record_lvl numeric(8) ,
+    -> sell_price numeric(8,2),
+    -> cost_price numeric(8,2));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc product_master;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| product_no     | varchar(6)   | NO   | PRI | NULL    |       |
+| description    | varchar(50)  | NO   |     | NULL    |       |
+| profit_percent | decimal(3,2) | NO   |     | NULL    |       |
+| unit_measure   | varchar(10)  | NO   |     | NULL    |       |
+| qty_on_hand    | decimal(7,0) | NO   |     | NULL    |       |
+| record_lvl     | decimal(8,0) | YES  |     | NULL    |       |
+| sell_price     | decimal(8,2) | YES  |     | NULL    |       |
+| cost_price     | decimal(8,2) | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> drop- product_master;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '- product_master' at line 1
+mysql> drop product_master;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'product_master' at line 1
+mysql> drop table product_master;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table product_master
+    -> (product_no varchar(6) primary key,
+    -> description varchar(50) not null,
+    -> profit_percent numeric(3,2) not null,
+    -> unit_measure varchar(10) not null,
+    -> qty_on_hand numeric(7) not null,
+    -> record_lvl numeric(8) not null,
+    -> sell_price numeric(8,2) check(sell_price > 0),
+    -> cost_price numeric(8,2) check(cost_price > 0));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc product_master;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| product_no     | varchar(6)   | NO   | PRI | NULL    |       |
+| description    | varchar(50)  | NO   |     | NULL    |       |
+| profit_percent | decimal(3,2) | NO   |     | NULL    |       |
+| unit_measure   | varchar(10)  | NO   |     | NULL    |       |
+| qty_on_hand    | decimal(7,0) | NO   |     | NULL    |       |
+| record_lvl     | decimal(8,0) | NO   |     | NULL    |       |
+| sell_price     | decimal(8,2) | YES  |     | NULL    |       |
+| cost_price     | decimal(8,2) | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> insert into Client_master(client_no,Name,city,pin_code,state,bal_due) values
+    -> (C00001,'Ivan Bayross','Bombay',400054,'Maharashtra',15000);
+ERROR 1054 (42S22): Unknown column 'pin_code' in 'field list'
+mysql> insert into Client_master(client_no,Name,city,pincode,state,bal_due) values
+    -> (C00001,'Ivan Bayross','Bombay',400054,'Maharashtra',15000);
+ERROR 1054 (42S22): Unknown column 'C00001' in 'field list'
+mysql> insert into Client_master(client_no,Name,city,pincode,state,bal_due) values
+    -> ('C00001','Ivan Bayross','Bombay',400054,'Maharashtra',15000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from Client_master;
++-----------+--------------+----------+----------+--------+-------------+---------+----------+
+| client_no | Name         | address1 | address2 | city   | state       | pincode | bal_due  |
++-----------+--------------+----------+----------+--------+-------------+---------+----------+
+| C00001    | Ivan Bayross | NULL     | NULL     | Bombay | Maharashtra |  400054 | 15000.00 |
++-----------+--------------+----------+----------+--------+-------------+---------+----------+
+1 row in set (0.00 sec)
+
+mysql> insert into Client_master
+    -> (client_no,Name,city,pincode,state,bal_due) values
+    -> ('C00002','Vandana saitwal','Madras',780001,'Tamil Nadu',0),
+    -> ('C00003','Pramada jaguste','Bombay',400057,'Maharashtra',5000),
+    -> ('C00004','Basu Navindgi','Bombay',400056,'Maharashtra',0),
+    -> ('C00005','Ravi Sreedheran','Delhi',100001,'Delhi',2000),
+    -> ('C00006','Rukmini','Bombay',400050,'Maharashtra',0);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select  * from Client_master;
++-----------+-----------------+----------+----------+--------+-------------+---------+----------+
+| client_no | Name            | address1 | address2 | city   | state       | pincode | bal_due  |
++-----------+-----------------+----------+----------+--------+-------------+---------+----------+
+| C00001    | Ivan Bayross    | NULL     | NULL     | Bombay | Maharashtra |  400054 | 15000.00 |
+| C00002    | Vandana saitwal | NULL     | NULL     | Madras | Tamil Nadu  |  780001 |     0.00 |
+| C00003    | Pramada jaguste | NULL     | NULL     | Bombay | Maharashtra |  400057 |  5000.00 |
+| C00004    | Basu Navindgi   | NULL     | NULL     | Bombay | Maharashtra |  400056 |     0.00 |
+| C00005    | Ravi Sreedheran | NULL     | NULL     | Delhi  | Delhi       |  100001 |  2000.00 |
+| C00006    | Rukmini         | NULL     | NULL     | Bombay | Maharashtra |  400050 |     0.00 |
++-----------+-----------------+----------+----------+--------+-------------+---------+----------+
+6 rows in set (0.00 sec)
+
+mysql> insert into product_master values
+    -> ('P00001','1.44 Floppies', 5,'Piece', 100, 20, 525, 500);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from product_master;
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+| product_no | description   | profit_percent | unit_measure | qty_on_hand | record_lvl | sell_price | cost_price |
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+| P00001     | 1.44 Floppies |           5.00 | Piece        |         100 |         20 |     525.00 |     500.00 |
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into product_master values
+    -> ('P03453','Monitors', 6, 'Piece', 10, 3, 12000, 11280),
+    -> ('P06734', 'Mouse', 5, 'Piece', 20, 5, 1050, 1000),
+    -> ('P07865', '1.22 Floppies', 5, 'Piece', 100,20,525,500),
+    -> ('P07868', 'Keyboards', 2, 'Piece', 10,3,3150,3050),
+    -> ('P07885', 'CD Drive', 2.5, 'Piece', 10, 3, 5250,5100),
+    -> ('P07965', '540 HDD', 4, 'Piece', 10, 3, 8400, 8000),
+    -> ('P07975', '1.44 Drive', 5, 'Piece', 10,3, 1050,1000),
+    -> ('P08865', '1.22 Drive', 5, 'Piece', 2, 3, 1050, 1000);
+Query OK, 8 rows affected (0.00 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> delect * from product_master;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delect * from product_master' at line 1
+mysql> select * from product_master;
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+| product_no | description   | profit_percent | unit_measure | qty_on_hand | record_lvl | sell_price | cost_price |
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+| P00001     | 1.44 Floppies |           5.00 | Piece        |         100 |         20 |     525.00 |     500.00 |
+| P03453     | Monitors      |           6.00 | Piece        |          10 |          3 |   12000.00 |   11280.00 |
+| P06734     | Mouse         |           5.00 | Piece        |          20 |          5 |    1050.00 |    1000.00 |
+| P07865     | 1.22 Floppies |           5.00 | Piece        |         100 |         20 |     525.00 |     500.00 |
+| P07868     | Keyboards     |           2.00 | Piece        |          10 |          3 |    3150.00 |    3050.00 |
+| P07885     | CD Drive      |           2.50 | Piece        |          10 |          3 |    5250.00 |    5100.00 |
+| P07965     | 540 HDD       |           4.00 | Piece        |          10 |          3 |    8400.00 |    8000.00 |
+| P07975     | 1.44 Drive    |           5.00 | Piece        |          10 |          3 |    1050.00 |    1000.00 |
+| P08865     | 1.22 Drive    |           5.00 | Piece        |           2 |          3 |    1050.00 |    1000.00 |
++------------+---------------+----------------+--------------+-------------+------------+------------+------------+
+9 rows in set (0.00 sec)
+
+mysql> create table salesman_master 
+    -> (salesman_no varchar(6), primary key,
+    -> salesman_name varchar(20) not null,
+    -> Address1 varchar(30) not null,
+    -> Address2 varchar(30),
+    -> city varchar(20),
+    -> pincode varchar(6),
+    -> state varchar(20),
+    -> sal_amt number(8,2) check(sal_amt > 0),
+    -> tgt_to_get numeric(6,2) check(tgt-to_get > 0),
+    -> ytd_sales numeric(6,2) not null,
+    -> remarks varchar(60));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+salesman_name varchar(20) not null,
+Address1 varchar(30) not null,
+Address2 va' at line 2
+mysql> create table salesman_master 
+    -> (salesman_no varchar(6), primary key,
+    -> salesman_name varchar(20) not null,
+    -> Address1 varchar(30) not null,
+    -> Address2 varchar(30),
+    -> city varchar(20),
+    -> pincode varchar(6),
+    -> state varchar(20),
+    -> sal_amt numeric(8,2) check(sal_amt > 0),
+    -> tgt_to_get numeric(6,2) check(tgt-to_get > 0),
+    -> ytd_sales numeric(6,2) not null,
+    -> remarks varchar(60));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+salesman_name varchar(20) not null,
+Address1 varchar(30) not null,
+Address2 va' at line 2
+mysql> create table salesman_master 
+    -> (salesman_no varchar(6) primary key,
+    -> salesman_name varchar(20) not null,
+    -> Address1 varchar(30) not null,
+    -> Address2 varchar(30),
+    -> city varchar(20),
+    -> pincode varchar(6),
+    -> state varchar(20),
+    -> sal_amt number(8,2) check(sal_amt > 0),
+    -> tgt_to_get numeric(6,2) check(tgt-to_get > 0),
+    -> ytd_sales numeric(6,2) not null,
+    -> remarks varchar(60));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'number(8,2) check(sal_amt > 0),
+tgt_to_get numeric(6,2) check(tgt-to_get > 0),
+y' at line 9
+mysql> create table salesman_master 
+    -> (salesman_no varchar(6) primary key,
+    -> salesman_name varchar(20) not null,
+    -> Address1 varchar(30) not null,
+    -> Address2 varchar(30),
+    -> city varchar(20),
+    -> pincode varchar(6),
+    -> state varchar(20),
+    -> sal_amt numeric(8,2) check(sal_amt > 0),
+    -> tgt_to_get numeric(6,2) check(tgt-to_get > 0),
+    -> ytd_sales numeric(6,2) not null,
+    -> remarks varchar(60));
+ERROR 3813 (HY000): Column check constraint 'salesman_master_chk_2' references other column.
+mysql> create table salesman_master 
+    -> (salesman_no varchar(6) primary key,
+    -> salesman_name varchar(20) not null,
+    -> Address1 varchar(30) not null,
+    -> Address2 varchar(30),
+    -> city varchar(20),
+    -> pincode varchar(6),
+    -> state varchar(20),
+    -> sal_amt numeric(8,2) check(sal_amt > 0),
+    -> tgt_to_get numeric(6,2) check(tgt_to_get > 0),
+    -> ytd_sales numeric(6,2) not null,
+    -> remarks varchar(60));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc salesman_master;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| salesman_no   | varchar(6)   | NO   | PRI | NULL    |       |
+| salesman_name | varchar(20)  | NO   |     | NULL    |       |
+| Address1      | varchar(30)  | NO   |     | NULL    |       |
+| Address2      | varchar(30)  | YES  |     | NULL    |       |
+| city          | varchar(20)  | YES  |     | NULL    |       |
+| pincode       | varchar(6)   | YES  |     | NULL    |       |
+| state         | varchar(20)  | YES  |     | NULL    |       |
+| sal_amt       | decimal(8,2) | YES  |     | NULL    |       |
+| tgt_to_get    | decimal(6,2) | YES  |     | NULL    |       |
+| ytd_sales     | decimal(6,2) | NO   |     | NULL    |       |
+| remarks       | varchar(60)  | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+11 rows in set (0.00 sec)
+
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6) references client_master(client_no),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6) references salesman_master(salesman_no),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc sales_order;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)  | NO   | PRI | NULL    |       |
+| s_order_date | date        | YES  |     | NULL    |       |
+| client_no    | varchar(6)  | YES  |     | NULL    |       |
+| dely_addr    | varchar(25) | YES  |     | NULL    |       |
+| salesman_no  | varchar(6)  | YES  |     | NULL    |       |
+| dely_type    | char(1)     | YES  |     | F       |       |
+| billed_yn    | char(1)     | YES  |     | N       |       |
+| dely_date    | date        | YES  |     | NULL    |       |
+| order_status | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql>    drop table sales_order;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_cdac  |
++-----------------+
+| account         |
+| cardinfo        |
+| cardtype        |
+| client_master   |
+| customer        |
+| dept            |
+| dept1           |
+| emp             |
+| emp1            |
+| locale          |
+| product_master  |
+| salesman_master |
+| student         |
++-----------------+
+13 rows in set (0.00 sec)
+
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10))
+    -> foreign key client_no references client_master(client_no),
+    -> foreign key salesman_no references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key client_no references client_master(client_no),
+foreign key salesman_' at line 11
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10))
+    -> foreign key client_no references client_master(client_no) salesman_no references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key client_no references client_master(client_no) salesman_no references' at line 11
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10))
+    -> foreign key client_no references client_master(client_no),
+    -> foreign key salesman_no references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key client_no references client_master(client_no),
+foreign key salesman_' at line 11
+mysql> 
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10)),
+    -> foreign key client_no references client_master(client_no),
+    -> foreign key salesman_no references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+foreign key client_no references client_master(client_no),
+foreign key salesma' at line 10
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10),
+    -> foreign key client_no references client_master(client_no),
+    -> foreign key salesman_no references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'references client_master(client_no),
+foreign key salesman_no references salesman' at line 11
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10),
+    -> foreign key (client_no) references client_master(client_no),
+    -> foreign key (salesman_no) references salesman_master(salesman_no));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc sales_orde
+    -> r;
+ERROR 1146 (42S02): Table 'cdac.sales_orde' doesn't exist
+mysql> desc sales_order;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)  | NO   | PRI | NULL    |       |
+| s_order_date | date        | YES  |     | NULL    |       |
+| client_no    | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_addr    | varchar(25) | YES  |     | NULL    |       |
+| salesman_no  | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_type    | char(1)     | YES  |     | F       |       |
+| billed_yn    | char(1)     | YES  |     | N       |       |
+| dely_date    | date        | YES  |     | NULL    |       |
+| order_status | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> drop table sales_order;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10) check(order_status in('in process','Fulfilled','BackOrder','Cancelled'),
+    -> foreign key (client_no) references client_master(client_no),
+    -> foreign key (salesman_no) references salesman_master(salesman_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',
+foreign key (client_no) references client_master(client_no),
+foreign key (sale' at line 10
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10) check (order_status in ('in process','Fulfilled','BackOrder','Cancelled')),
+    -> foreign key (client_no) references client_master(client_no),
+    -> foreign key (salesman_no) references salesman_master(salesman_no));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc sales_order;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)  | NO   | PRI | NULL    |       |
+| s_order_date | date        | YES  |     | NULL    |       |
+| client_no    | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_addr    | varchar(25) | YES  |     | NULL    |       |
+| salesman_no  | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_type    | char(1)     | YES  |     | F       |       |
+| billed_yn    | char(1)     | YES  |     | N       |       |
+| dely_date    | date        | YES  |     | NULL    |       |
+| order_status | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> drop table sales_order;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table sales_order
+    -> (s_order_no varchar(6) primary key,
+    -> s_order_date Date,
+    -> client_no varchar(6),
+    -> dely_addr varchar(25),
+    -> salesman_no varchar(6),
+    -> dely_type char(1) check (dely_type in ('P','F')) default 'F',
+    -> billed_yn char(1) check (billed_yn in ('Y','N')) default 'N',
+    -> dely_date date,
+    -> order_status varchar(10) check (order_status in ('in process','Fulfilled','BackOrder','Cancelled')),
+    -> foreign key (client_no) references client_master(client_no),
+    -> foreign key (salesman_no) references salesman_master(salesman_no));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc sales_order;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)  | NO   | PRI | NULL    |       |
+| s_order_date | date        | YES  |     | NULL    |       |
+| client_no    | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_addr    | varchar(25) | YES  |     | NULL    |       |
+| salesman_no  | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_type    | char(1)     | YES  |     | F       |       |
+| billed_yn    | char(1)     | YES  |     | N       |       |
+| dely_date    | date        | YES  |     | NULL    |       |
+| order_status | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> create table sales_order_details
+    -> (s_order_no varchar(6),
+    -> product_no varchar(6),
+    -> qty_ordered numeric(8),
+    -> qty_disp numeric(8),
+    -> product_rate numeric(10,2)
+    -> foreign key (s_order_no) references sales_order(s_order_no),
+    -> foreign key (product_no) references product_master(product-no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key (s_order_no) references sales_order(s_order_no),
+foreign key (produc' at line 7
+mysql> create table sales_order_details
+    -> (s_order_no varchar(6),
+    -> product_no varchar(6),
+    -> qty_ordered numeric(8),
+    -> qty_disp numeric(8),
+    -> product_rate numeric(10,2),
+    -> foreign key (s_order_no) references sales_order(s_order_no),
+    -> foreign key (product_no) references product_master(product-no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-no))' at line 8
+mysql> create table sales_order_details
+    -> (s_order_no varchar(6),
+    -> product_no varchar(6),
+    -> qty_ordered numeric(8),
+    -> qty_disp numeric(8),
+    -> product_rate numeric(10,2),
+    -> foreign key (s_order_no) references sales_order(s_order_no),
+    -> foreign key (product_no) references product_master(product_no));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc sales_order_details;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)    | YES  | MUL | NULL    |       |
+| product_no   | varchar(6)    | YES  | MUL | NULL    |       |
+| qty_ordered  | decimal(8,0)  | YES  |     | NULL    |       |
+| qty_disp     | decimal(8,0)  | YES  |     | NULL    |       |
+| product_rate | decimal(10,2) | YES  |     | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into salesman_master values
+    -> ('S00001','Kiran','A/14','Worli','Bombay','400002','MAH',3000,100,50,'Good');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from salesman_master;
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+| salesman_no | salesman_name | Address1 | Address2 | city   | pincode | state | sal_amt | tgt_to_get | ytd_sales | remarks |
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+| S00001      | Kiran         | A/14     | Worli    | Bombay | 400002  | MAH   | 3000.00 |     100.00 |     50.00 | Good    |
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> insert into salesman_master values
+    -> ('S00002','Manish','65','Nariman','Bombay','400001','MAH',3000,200,100,'Good'),
+    -> ('S00003','Ravi','P-7','Bandra','Bombay','400032','MAH',3000,200,100,'Good'),
+    -> ('S00004','Ashish','A/5','Juhu','Bombay','400044','MAH',3500, 200, 150,'Good');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select *v from salesman_master;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'v from salesman_master' at line 1
+mysql> select v from salesman_master;
+ERROR 1054 (42S22): Unknown column 'v' in 'field list'
+mysql> select * from salesman_master;
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+| salesman_no | salesman_name | Address1 | Address2 | city   | pincode | state | sal_amt | tgt_to_get | ytd_sales | remarks |
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+| S00001      | Kiran         | A/14     | Worli    | Bombay | 400002  | MAH   | 3000.00 |     100.00 |     50.00 | Good    |
+| S00002      | Manish        | 65       | Nariman  | Bombay | 400001  | MAH   | 3000.00 |     200.00 |    100.00 | Good    |
+| S00003      | Ravi          | P-7      | Bandra   | Bombay | 400032  | MAH   | 3000.00 |     200.00 |    100.00 | Good    |
+| S00004      | Ashish        | A/5      | Juhu     | Bombay | 400044  | MAH   | 3500.00 |     200.00 |    150.00 | Good    |
++-------------+---------------+----------+----------+--------+---------+-------+---------+------------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into sales_order(s_order_no,s_order_date,client_no,dely_type,bill_yn,salesman_no,dely_date,order_status) values
+    -> ('O19001','1996-01-12','C00001','F','N','S00001','1996-01-20','in progress');
+ERROR 1054 (42S22): Unknown column 'bill_yn' in 'field list'
+mysql> desc sales_order;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)  | NO   | PRI | NULL    |       |
+| s_order_date | date        | YES  |     | NULL    |       |
+| client_no    | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_addr    | varchar(25) | YES  |     | NULL    |       |
+| salesman_no  | varchar(6)  | YES  | MUL | NULL    |       |
+| dely_type    | char(1)     | YES  |     | F       |       |
+| billed_yn    | char(1)     | YES  |     | N       |       |
+| dely_date    | date        | YES  |     | NULL    |       |
+| order_status | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> insert into sales_order(s_order_no,s_order_date,client_no,dely_type,billed_yn,salesman_no,dely_date,order_status) values
+    -> ('O19001','1996-01-12','C00001','F','N','S00001','1996-01-20','in progress');
+ERROR 1406 (22001): Data too long for column 'order_status' at row 1
+mysql> insert into sales_order(s_order_no,s_order_date,client_no,dely_type,billed_yn,salesman_no,dely_date,order_status) values
+    -> ('O19001','1996-01-12','C00001','F','N','S00001','1996-01-20','in process');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from sales_order;
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+| s_order_no | s_order_date | client_no | dely_addr | salesman_no | dely_type | billed_yn | dely_date  | order_status |
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+| O19001     | 1996-01-12   | C00001    | NULL      | S00001      | F         | N         | 1996-01-20 | in process   |
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> insert into sales_order(s_order_no,s_order_date,client_no,dely_type,billed_yn,salesman_no,dely_date,order_status) values
+    -> ('O19002','1996-01-25','C00002','P','N','S00002','1996-01-27','Cancelled'),
+    -> ('O46865','1996-02-18','C00003','F','Y','S00003','1996-02-20','Fulfilled'),
+    -> ('O19003','1996-04-03','C00001','F','Y','S00001','1996-04-07','Fulfilled'),
+    -> ('O46866','1996-05-20','C00004','P','N','S00002','1996-05-22','Cancelled'),
+    -> ('O10008','1996-05-24','C00005','F','N','S00004','1996-05-26','in process');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from sales_order;
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+| s_order_no | s_order_date | client_no | dely_addr | salesman_no | dely_type | billed_yn | dely_date  | order_status |
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+| O10008     | 1996-05-24   | C00005    | NULL      | S00004      | F         | N         | 1996-05-26 | in process   |
+| O19001     | 1996-01-12   | C00001    | NULL      | S00001      | F         | N         | 1996-01-20 | in process   |
+| O19002     | 1996-01-25   | C00002    | NULL      | S00002      | P         | N         | 1996-01-27 | Cancelled    |
+| O19003     | 1996-04-03   | C00001    | NULL      | S00001      | F         | Y         | 1996-04-07 | Fulfilled    |
+| O46865     | 1996-02-18   | C00003    | NULL      | S00003      | F         | Y         | 1996-02-20 | Fulfilled    |
+| O46866     | 1996-05-20   | C00004    | NULL      | S00002      | P         | N         | 1996-05-22 | Cancelled    |
++------------+--------------+-----------+-----------+-------------+-----------+-----------+------------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> desc sales_order_detail
+    -> ;
+ERROR 1146 (42S02): Table 'cdac.sales_order_detail' doesn't exist
+mysql> desc sales_order_details;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| s_order_no   | varchar(6)    | YES  | MUL | NULL    |       |
+| product_no   | varchar(6)    | YES  | MUL | NULL    |       |
+| qty_ordered  | decimal(8,0)  | YES  |     | NULL    |       |
+| qty_disp     | decimal(8,0)  | YES  |     | NULL    |       |
+| product_rate | decimal(10,2) | YES  |     | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into sales_order_details values
+    -> ('O19001','P00001',4,4,525);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from sales_order_details;
++------------+------------+-------------+----------+--------------+
+| s_order_no | product_no | qty_ordered | qty_disp | product_rate |
++------------+------------+-------------+----------+--------------+
+| O19001     | P00001     |           4 |        4 |       525.00 |
++------------+------------+-------------+----------+--------------+
+1 row in set (0.00 sec)
+
+mysql> insert into sales_order_details values
+    -> ('O19001','P07965',2,1,8400),
+    -> ('O19001','P07885',2,1,5250),
+    -> ('O19002','P00001',10,0,525),
+    -> ('O46865','P07868',3,1,3150),
+    -> ('O46865','P07885',3,1,5250),
+    -> ('046865','P00001',10,10,525),
+    -> ('O46865','P03453',4,4,1050),
+    -> ('O19003','P03453',2,2,1050),
+    -> ('O19003','P06734',1,1,12000),
+    -> ('O46866','P07965',1,0,8400),
+    -> ('O46866','P07975',1,0,1050),
+    -> ('O10008','P00001',10,5,525),
+    -> ('O10008','P07975',5,3,1050);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`cdac`.`sales_order_details`, CONSTRAINT `sales_order_details_ibfk_1` FOREIGN KEY (`s_order_no`) REFERENCES `sales_order` (`s_order_no`))
+mysql> insert into sales_order_details values
+    -> ('O19001','P07965',2,1,8400),
+    -> ('O19001','P07885',2,1,5250),
+    -> ('O19002','P00001',10,0,525),
+    -> ('O46865','P07868',3,1,3150),
+    -> ('O46865','P07885',3,1,5250),
+    -> ('O46865','P00001',10,10,525),
+    -> ('O46865','P03453',4,4,1050),
+    -> ('O19003','P03453',2,2,1050),
+    -> ('O19003','P06734',1,1,12000),
+    -> ('O46866','P07965',1,0,8400),
+    -> ('O46866','P07975',1,0,1050),
+    -> ('O10008','P00001',10,5,525),
+    -> ('O10008','P07975',5,3,1050);
+Query OK, 13 rows affected (0.02 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select * from sales_order_details;
++------------+------------+-------------+----------+--------------+
+| s_order_no | product_no | qty_ordered | qty_disp | product_rate |
++------------+------------+-------------+----------+--------------+
+| O19001     | P00001     |           4 |        4 |       525.00 |
+| O19001     | P07965     |           2 |        1 |      8400.00 |
+| O19001     | P07885     |           2 |        1 |      5250.00 |
+| O19002     | P00001     |          10 |        0 |       525.00 |
+| O46865     | P07868     |           3 |        1 |      3150.00 |
+| O46865     | P07885     |           3 |        1 |      5250.00 |
+| O46865     | P00001     |          10 |       10 |       525.00 |
+| O46865     | P03453     |           4 |        4 |      1050.00 |
+| O19003     | P03453     |           2 |        2 |      1050.00 |
+| O19003     | P06734     |           1 |        1 |     12000.00 |
+| O46866     | P07965     |           1 |        0 |      8400.00 |
+| O46866     | P07975     |           1 |        0 |      1050.00 |
+| O10008     | P00001     |          10 |        5 |       525.00 |
+| O10008     | P07975     |           5 |        3 |      1050.00 |
++------------+------------+-------------+----------+--------------+
+14 rows in set (0.00 sec)
+
+mysql> truncate table sales_order_details;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into sales_order_details values
+    -> ('O19001','P00001',4,4,525);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> 
+mysql> insert into sales_order_details values
+    -> ('O19001','P07965',2,1,8400),
+    -> ('O19001','P07885',2,1,5250),
+    -> ('O19002','P00001',10,0,525),
+    -> ('O46865','P07868',3,3,3150),
+    -> ('O46865','P07885',3,1,5250),
+    -> ('O46865','P00001',10,10,525),
+    -> ('O46865','P03453',4,4,1050),
+    -> ('O19003','P03453',2,2,1050),
+    -> ('O19003','P06734',1,1,12000),
+    -> ('O46866','P07965',1,0,8400),
+    -> ('O46866','P07975',1,0,1050),
+    -> ('O10008','P00001',10,5,525),
+    -> ('O10008','P07975',5,3,1050);
+Query OK, 13 rows affected (0.01 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select * from sales_order_details;
++------------+------------+-------------+----------+--------------+
+| s_order_no | product_no | qty_ordered | qty_disp | product_rate |
++------------+------------+-------------+----------+--------------+
+| O19001     | P00001     |           4 |        4 |       525.00 |
+| O19001     | P07965     |           2 |        1 |      8400.00 |
+| O19001     | P07885     |           2 |        1 |      5250.00 |
+| O19002     | P00001     |          10 |        0 |       525.00 |
+| O46865     | P07868     |           3 |        3 |      3150.00 |
+| O46865     | P07885     |           3 |        1 |      5250.00 |
+| O46865     | P00001     |          10 |       10 |       525.00 |
+| O46865     | P03453     |           4 |        4 |      1050.00 |
+| O19003     | P03453     |           2 |        2 |      1050.00 |
+| O19003     | P06734     |           1 |        1 |     12000.00 |
+| O46866     | P07965     |           1 |        0 |      8400.00 |
+| O46866     | P07975     |           1 |        0 |      1050.00 |
+| O10008     | P00001     |          10 |        5 |       525.00 |
+| O10008     | P07975     |           5 |        3 |      1050.00 |
++------------+------------+-------------+----------+--------------+
+14 rows in set (0.00 sec)
+
+mysql> create table salary 
+    -> (empno numeric(3),
+    -> ename varchar(20),
+    -> hiredate date,
+    -> sal numeric(10,2));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc salary;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| empno    | decimal(3,0)  | YES  |     | NULL    |       |
+| ename    | varchar(20)   | YES  |     | NULL    |       |
+| hiredate | date          | YES  |     | NULL    |       |
+| sal      | decimal(10,2) | YES  |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into salary values
+    -> (1,'Vijay','2024-06-15',25000),
+    -> (2,'Shyam','2023-03-22',30000),
+    -> (3,'Hari','2021-05-17',32000),
+    -> (4,'Gaurav','2022-08-08',15000),
+    -> (5,'Abhishek','2023-04-02',23000);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from salary;
++-------+----------+------------+----------+
+| empno | ename    | hiredate   | sal      |
++-------+----------+------------+----------+
+|     1 | Vijay    | 2024-06-15 | 25000.00 |
+|     2 | Shyam    | 2023-03-22 | 30000.00 |
+|     3 | Hari     | 2021-05-17 | 32000.00 |
+|     4 | Gaurav   | 2022-08-08 | 15000.00 |
+|     5 | Abhishek | 2023-04-02 | 23000.00 |
++-------+----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> add commission numeric(10,2);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | YES  |     | NULL    |       |
+| ename      | varchar(20)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> add mgr numeric(40);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | YES  |     | NULL    |       |
+| ename      | varchar(20)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> add primary key(empno);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(20)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> add check(sal >1000)(sal);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(sal)' at line 2
+mysql> alter table salary
+    -> add check(sal >1000);
+Query OK, 5 rows affected (0.05 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(20)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> add check(comm<100000);
+ERROR 1054 (42S22): Unknown column 'comm' in 'check constraint salary_chk_2 expression'
+mysql> alter table salary
+    -> add check(commission<100000);
+Query OK, 5 rows affected (0.06 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(20)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> ename varchar(45);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ename varchar(45)' at line 2
+mysql> alter table salary
+    -> set ename varchar(45);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set ename varchar(45)' at line 2
+mysql> alter table salary
+    -> modify ename varchar(45);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(45)   | YES  |     | NULL    |       |
+| hiredate   | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> rename hiredate to doj;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to doj' at line 2
+mysql> alter table salary
+    -> change hiredate doj date;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(45)   | YES  |     | NULL    |       |
+| doj        | date          | YES  |     | NULL    |       |
+| sal        | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> select * from salary;
++-------+----------+------------+----------+------------+------+
+| empno | ename    | doj        | sal      | commission | mgr  |
++-------+----------+------------+----------+------------+------+
+|     1 | Vijay    | 2024-06-15 | 25000.00 |       NULL | NULL |
+|     2 | Shyam    | 2023-03-22 | 30000.00 |       NULL | NULL |
+|     3 | Hari     | 2021-05-17 | 32000.00 |       NULL | NULL |
+|     4 | Gaurav   | 2022-08-08 | 15000.00 |       NULL | NULL |
+|     5 | Abhishek | 2023-04-02 | 23000.00 |       NULL | NULL |
++-------+----------+------------+----------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> change sal salary numeric(10,2);
+ERROR 3959 (HY000): Check constraint 'salary_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> alter table salary
+    -> change sal salary numeric(10,2) check salary >1000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary >1000' at line 2
+mysql> alter table salary
+    -> change sal salary numeric(10,2) check (salary >1000);
+ERROR 3959 (HY000): Check constraint 'salary_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> sp_rename 'sal' 'salary';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sp_rename 'sal' 'salary'' at line 1
+mysql> sp_rename 'sal','salary';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sp_rename 'sal','salary'' at line 1
+mysql> SP_RENAME 'sal' ,'salary';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SP_RENAME 'sal' ,'salary'' at line 1
+mysql> alter table salary
+    -> change sal salary;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> alter table salary
+    -> drop constraint check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check' at line 2
+mysql> alter table salary
+    -> drop check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> alter table salary
+    -> drop check sal;
+ERROR 3821 (HY000): Check constraint 'sal' is not found in the table.
+mysql> alter table salary
+    -> drop check (sal >1000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(sal >1000)' at line 2
+mysql> alter table salary
+    -> drop check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> help
+
+For information about MySQL products and services, visit:
+   http://www.mysql.com/
+For developer information, including the MySQL Reference Manual, visit:
+   http://dev.mysql.com/
+To buy MySQL Enterprise support, training, or other products, visit:
+   https://shop.mysql.com/
+
+List of all MySQL commands:
+Note that all text commands must be first on line and end with ';'
+?         (\?) Synonym for `help'.
+clear     (\c) Clear the current input statement.
+connect   (\r) Reconnect to the server. Optional arguments are db and host.
+delimiter (\d) Set statement delimiter.
+ego       (\G) Send command to mysql server, display result vertically.
+exit      (\q) Exit mysql. Same as quit.
+go        (\g) Send command to mysql server.
+help      (\h) Display this help.
+notee     (\t) Don't write into outfile.
+print     (\p) Print current command.
+prompt    (\R) Change your mysql prompt.
+quit      (\q) Quit mysql.
+rehash    (\#) Rebuild completion hash.
+source    (\.) Execute an SQL script file. Takes a file name as an argument.
+status    (\s) Get status information from the server.
+system    (\!) Execute a system shell command.
+tee       (\T) Set outfile [to_outfile]. Append everything into given outfile.
+use       (\u) Use another database. Takes database name as argument.
+charset   (\C) Switch to another charset. Might be needed for processing binlog with multi-byte charsets.
+warnings  (\W) Show warnings after every statement.
+nowarning (\w) Don't show warnings after every statement.
+resetconnection(\x) Clean session context.
+query_attributes Sets string parameters (name1 value1 name2 value2 ...) for the next query to pick up.
+ssl_session_data_print Serializes the current SSL session data to stdout or file
+
+For server side help, type 'help contents'
+
+mysql> alter table salary
+    -> drop constraint check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check' at line 2
+mysql> alter table salary
+    -> drop check sal
+    -> (sal>1000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(sal>1000)' at line 3
+mysql> alter table salary
+    -> drop check sal
+    -> check (sal>1000);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check (sal>1000)' at line 3
+mysql> alter table salary
+    -> drop constraint sal;
+ERROR 3940 (HY000): Constraint 'sal' does not exist.
+mysql> alter table salary
+    -> drop constraint check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check' at line 2
+mysql> alter table salary
+    -> drop constraint check;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check' at line 2
+mysql> alter table salary
+    -> ^C
+mysql> alter table salary
+    -> rename column sal to salary;
+ERROR 3959 (HY000): Check constraint 'salary_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> select constraint from salary;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'constraint from salary' at line 1
+mysql> Terminal close -- exit!
+mysql> show tables;
++---------------------+
+| Tables_in_cdac      |
++---------------------+
+| account             |
+| cardinfo            |
+| cardtype            |
+| client_master       |
+| customer            |
+| dept                |
+| dept1               |
+| emp                 |
+| emp1                |
+| locale              |
+| product_master      |
+| salary              |
+| sales_order         |
+| sales_order_details |
+| salesman_master     |
+| student             |
++---------------------+
+16 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> change sal salary numeric(10,2);
+ERROR 3959 (HY000): Check constraint 'salary_chk_1' uses column 'sal', hence column cannot be dropped or renamed.
+mysql> 
+mysql> alter table salary
+    -> drop constraint salary_chk_1;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table salary
+    -> change sal salary numeric(10,2);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> descsalary;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'descsalary' at line 1
+mysql> desc salary;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(45)   | YES  |     | NULL    |       |
+| doj        | date          | YES  |     | NULL    |       |
+| salary     | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table salary
+    -> rename sal_table;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc salary;
+ERROR 1146 (42S02): Table 'cdac.salary' doesn't exist
+mysql> desc sal_table;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empno      | decimal(3,0)  | NO   | PRI | NULL    |       |
+| ename      | varchar(45)   | YES  |     | NULL    |       |
+| doj        | date          | YES  |     | NULL    |       |
+| salary     | decimal(10,2) | YES  |     | NULL    |       |
+| commission | decimal(10,2) | YES  |     | NULL    |       |
+| mgr        | decimal(40,0) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> desc customer;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| custid           | int         | NO   | PRI | NULL    |       |
+| email_address    | varchar(75) | YES  |     | NULL    |       |
+| first_name       | varchar(50) | YES  |     | NULL    |       |
+| last_name        | varchar(50) | YES  |     | NULL    |       |
+| address1         | varchar(50) | YES  |     | NULL    |       |
+| address2         | varchar(50) | YES  |     | NULL    |       |
+| customer_zip     | varchar(10) | YES  |     | NULL    |       |
+| area_code        | char(3)     | YES  |     | NULL    |       |
+| telephone_number | char(7)     | YES  |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> select * from customer;
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+| custid | email_address    | first_name | last_name | address1                | address2    | customer_zip | area_code | telephone_number |
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+|     10 | abc123@gmail.com | vijay      | jagtap    | room no 1, jai building | dahisar (e) | mumbai       | 68        | 5896478          |
+|     20 | def568@gmail.com | jay        | patil     | room no 3, sai building | andheri (w) | mumbai       | 78        | 6987456          |
+|     30 | hfgh54@gmail.com | shyam      | kumar     | room no 15, shyam vihar | malad (w)   | mumbai       | 65        | 6893157          |
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> update table customer
+    -> set address1 = 'boston'
+    -> where custid = 20;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table customer
+set address1 = 'boston'
+where custid = 20' at line 1
+mysql> select * from customer;
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+| custid | email_address    | first_name | last_name | address1                | address2    | customer_zip | area_code | telephone_number |
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+|     10 | abc123@gmail.com | vijay      | jagtap    | room no 1, jai building | dahisar (e) | mumbai       | 68        | 5896478          |
+|     20 | def568@gmail.com | jay        | patil     | room no 3, sai building | andheri (w) | mumbai       | 78        | 6987456          |
+|     30 | hfgh54@gmail.com | shyam      | kumar     | room no 15, shyam vihar | malad (w)   | mumbai       | 65        | 6893157          |
++--------+------------------+------------+-----------+-------------------------+-------------+--------------+-----------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> select custid from customer;
++--------+
+| custid |
++--------+
+|     10 |
+|     20 |
+|     30 |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> update customer
+    -> set address1 = 'boston'
+    -> where custid = 20;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select custid, address1 from customer;
++--------+-------------------------+
+| custid | address1                |
++--------+-------------------------+
+|     10 | room no 1, jai building |
+|     20 | boston                  |
+|     30 | room no 15, shyam vihar |
++--------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> update customer
+    -> set address1 = 'mumbai'
+    -> where custid = 10;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> update customer
+    -> set address1 = 'pune'
+    -> where custid = 30;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select custid, address1 from customer;
++--------+----------+
+| custid | address1 |
++--------+----------+
+|     10 | mumbai   |
+|     20 | boston   |
+|     30 | pune     |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> update customer
+    -> set customer_zip = '100 300'
+    -> where custid = 30;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select custid, customer_zip from customer;
++--------+--------------+
+| custid | customer_zip |
++--------+--------------+
+|     10 | mumbai       |
+|     20 | mumbai       |
+|     30 | 100 300      |
++--------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> update customer
+    -> set customer_zip = '400 068'
+    -> where custid = 10;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> update customer
+    -> set customer_zip = '400 500'
+    -> where custid = 20;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select custid, customer_zip from customer;
++--------+--------------+
+| custid | customer_zip |
++--------+--------------+
+|     10 | 400 068      |
+|     20 | 400 500      |
+|     30 | 100 300      |
++--------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from cardtype;
++---------+-------------+
+| card_id | card_type   |
++---------+-------------+
+|      10 | debit card  |
+|      20 | credit card |
+|      50 | master card |
++---------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> delete from cardtype
+    -> where custid = 50;
+ERROR 1054 (42S22): Unknown column 'custid' in 'where clause'
+mysql> delete from cardtype
+    -> where card_id = 50;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from cardtype;
++---------+-------------+
+| card_id | card_type   |
++---------+-------------+
+|      10 | debit card  |
+|      20 | credit card |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> truncate cardinfo;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from cardtype;
++---------+-------------+
+| card_id | card_type   |
++---------+-------------+
+|      10 | debit card  |
+|      20 | credit card |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> truncate table cardinfo;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from cardtype;
++---------+-------------+
+| card_id | card_type   |
++---------+-------------+
+|      10 | debit card  |
+|      20 | credit card |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from cardinfo;
+Empty set (0.00 sec)
+
+mysql> desc cardinfo;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| car_id        | int          | NO   | PRI | NULL    |       |
+| ccnum         | varchar(16)  | YES  |     | NULL    |       |
+| ccexp         | date         | YES  |     | NULL    |       |
+| name_on_card  | varchar(100) | YES  |     | NULL    |       |
+| email_address | varchar(75)  | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into cardinfo 
+    -> values
+    -> (1,'djf','2012-4-25','edhf','uygfs');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from cardinfo;
++--------+-------+------------+--------------+---------------+
+| car_id | ccnum | ccexp      | name_on_card | email_address |
++--------+-------+------------+--------------+---------------+
+|      1 | djf   | 2012-04-25 | edhf         | uygfs         |
++--------+-------+------------+--------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> truncate cardinfo;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from cardinfo;
+Empty set (0.00 sec)
+
+mysql> insert into cardinfo
+    ->     -> values
+    ->     -> (1,'djf','2012-4-25','edhf','uygfs');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> values
+    -> (1,'djf','2012-4-25','edhf','uygfs')' at line 2
+mysql> insert into cardinfo
+    -> values
+    -> (1,'djf','2012-4-25','edhf','uygfs');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> truncate table cardinfo;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from cardinfo;
+Empty set (0.00 sec)
+
+mysql> desc cardinfo;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| car_id        | int          | NO   | PRI | NULL    |       |
+| ccnum         | varchar(16)  | YES  |     | NULL    |       |
+| ccexp         | date         | YES  |     | NULL    |       |
+| name_on_card  | varchar(100) | YES  |     | NULL    |       |
+| email_address | varchar(75)  | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> drop table cardtype;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from cardtype;
+ERROR 1146 (42S02): Table 'cdac.cardtype' doesn't exist
+mysql> exit

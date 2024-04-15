@@ -1,0 +1,51 @@
+mysql> use cdac;
+Database changed
+mysql> create table account(acc_no int primary key,acc_holder varchar(20), balance numeric(10,2), stddate date);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table customer(custid int primary key, cname varchar(20), mobile char(10), email varchar(10));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc account;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| acc_no     | int           | NO   | PRI | NULL    |       |
+| acc_holder | varchar(20)   | YES  |     | NULL    |       |
+| balance    | decimal(10,2) | YES  |     | NULL    |       |
+| stddate    | date          | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into account
+    -> (1,'abc',2000,'2024/2/12'),
+    -> (2,'def',3000,'2023-3-25'),
+    -> (3,'ghi',6000,'2021/8/5');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'abc',2000,'2024/2/12'),
+(2,'def',3000,'2023-3-25'),
+(3,'ghi',6000,'2021/8/5')' at line 2
+mysql> 
+mysql> insert into account
+    -> (1,'abc',2000,'2024/2/12'),
+    -> (2,'def',3000,'2023/3/25'),
+    -> (3,'ghi',6000,'2021/8/5');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'abc',2000,'2024/2/12'),
+(2,'def',3000,'2023/3/25'),
+(3,'ghi',6000,'2021/8/5')' at line 2
+mysql> 
+mysql> 
+mysql> insert into account values
+    -> (1,'abc',2000,'2024/2/12'),
+    -> (2,'def',3000,'2023/3/25'),
+    -> (3,'ghi',6000,'2021/8/5');
+Query OK, 3 rows affected, 3 warnings (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 3
+
+mysql> 
+mysql> insert into customer values
+    -> (1,'ZXC','4587698312','abc@gmail.com'),
+    -> (2,'ASD','4632971563','def@gmail.com'),
+    -> (3,'QWE','3685179645','jhh@gmail.com');
+ERROR 1406 (22001): Data too long for column 'email' at row 1
+mysql> 
+mysql> exit
